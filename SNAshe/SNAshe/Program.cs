@@ -102,18 +102,18 @@ namespace SNAshe
             var target = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
             if (target.IsValidTarget())
             {
-                if (menu.Item("cUseQ").GetValue<bool>())
+                if (menu.Item("cUseQ").GetValue<bool>() && Q.IsReady())
                 {
-                    if (myPlayer.GetBuffCount("AsheQ") >= 5 || myPlayer.GetBuffCount("AsheQReady") >= 5)
+                    if (myPlayer.GetBuffCount("AsheQ") >= 5 || myPlayer.GetBuffCount("asheqcastready") >= 5)
                     {
                         Q.Cast();
                     }
                 }
 
-                if (menu.Item("cUseW").GetValue<bool>())
+                if (menu.Item("cUseW").GetValue<bool>() && W.IsReady())
                     W.Cast(target);
 
-                if (menu.Item("cUseR").GetValue<bool>())
+                if (menu.Item("cUseR").GetValue<bool>() && R.IsReady())
                 {
                     var waypoints = target.GetWaypoints();
                     if ((myPlayer.Distance(waypoints.Last().To3D()) - myPlayer.Distance(target.Position)) > 400)
@@ -142,11 +142,7 @@ namespace SNAshe
 
         public static void LaneClear()
         {
-            if ((myPlayer.GetBuffCount("AsheQ") == 5
-                            || myPlayer.GetBuffCount("AsheQReady") == 5))
-            {
-                Q.Cast();
-            }
+           
 
         }
 
