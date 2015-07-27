@@ -1,0 +1,13 @@
+C:\Users\L# 3\Desktop\L# Assemblies\SNTwitch\SNTwitch\bin\Release\SNTwitch.exe.config
+C:\Users\L# 3\Desktop\L# Assemblies\SNTwitch\SNTwitch\bin\Release\SNTwitch.exe
+C:\Users\L# 3\Desktop\L# Assemblies\SNTwitch\SNTwitch\bin\Release\SNTwitch.pdb
+C:\Users\L# 3\Desktop\L# Assemblies\SNTwitch\SNTwitch\bin\Release\LeagueSharp.Common.dll
+C:\Users\L# 3\Desktop\L# Assemblies\SNTwitch\SNTwitch\bin\Release\LeagueSharp.dll
+C:\Users\L# 3\Desktop\L# Assemblies\SNTwitch\SNTwitch\bin\Release\SharpDX.dll
+C:\Users\L# 3\Desktop\L# Assemblies\SNTwitch\SNTwitch\bin\Release\SharpDX.Direct3D9.dll
+C:\Users\L# 3\Desktop\L# Assemblies\SNTwitch\SNTwitch\bin\Release\clipper_library.dll
+C:\Users\L# 3\Desktop\L# Assemblies\SNTwitch\SNTwitch\bin\Release\LeagueSharp.Sandbox.dll
+C:\Users\L# 3\Desktop\L# Assemblies\SNTwitch\SNTwitch\bin\Release\LeagueSharp.xml
+C:\Users\L# 3\Desktop\L# Assemblies\SNTwitch\SNTwitch\obj\Debug\SNTwitch.csprojResolveAssemblyReference.cache
+C:\Users\L# 3\Desktop\L# Assemblies\SNTwitch\SNTwitch\obj\Debug\SNTwitch.exe
+C:\Users\L# 3\Desktop\L# Assemblies\SNTwitch\SNTwitch\obj\Debug\SNTwitch.pdb
