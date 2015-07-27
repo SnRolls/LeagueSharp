@@ -8,6 +8,5 @@ C:\Users\L# 3\Desktop\L# Assemblies\SNTwitch\SNTwitch\bin\Release\SharpDX.Direct
 C:\Users\L# 3\Desktop\L# Assemblies\SNTwitch\SNTwitch\bin\Release\clipper_library.dll
 C:\Users\L# 3\Desktop\L# Assemblies\SNTwitch\SNTwitch\bin\Release\LeagueSharp.Sandbox.dll
 C:\Users\L# 3\Desktop\L# Assemblies\SNTwitch\SNTwitch\bin\Release\LeagueSharp.xml
-C:\Users\L# 3\Desktop\L# Assemblies\SNTwitch\SNTwitch\obj\Debug\SNTwitch.csprojResolveAssemblyReference.cache
 C:\Users\L# 3\Desktop\L# Assemblies\SNTwitch\SNTwitch\obj\Debug\SNTwitch.exe
 C:\Users\L# 3\Desktop\L# Assemblies\SNTwitch\SNTwitch\obj\Debug\SNTwitch.pdb

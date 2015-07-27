@@ -78,6 +78,15 @@ namespace SNTwitch
 
             Game.OnUpdate += OnUpdate;
             Drawing.OnDraw += OnDraw;
+
+            CustomDamageIndicator.Initialize(GetDamage);
+
+            
+        }
+
+        private static float GetDamage(Obj_AI_Hero target)
+        {
+            return E.GetDamage(target);
         }
 
         public static void OnUpdate(EventArgs args)
@@ -199,7 +208,9 @@ namespace SNTwitch
                          ObjectManager.Get<Obj_AI_Hero>()
                          .Where(enemy => enemy.IsValidTarget(E.Range) && enemy.GetBuffCount("twitchdeadlyvenom") == m.Item("hUseE").GetValue<Slider>().Value)
                              )
-                   {
+                   
+                    {
+                       if(!HasUndyingBuff(enemy))
                        E.Cast();
                        
                    }
@@ -233,6 +244,8 @@ namespace SNTwitch
 
         public static void OnDraw(EventArgs args)
         {
+            CustomDamageIndicator.DrawingColor = System.Drawing.Color.DarkSeaGreen;
+            CustomDamageIndicator.Enabled = true;
             if (!p.IsDead && W.Level > 0 && W.IsReady() && m.Item("drawW").GetValue<bool>())
             {
                 Render.Circle.DrawCircle(p.Position, W.Range, System.Drawing.Color.DarkGreen);
@@ -241,6 +254,17 @@ namespace SNTwitch
             if (!p.IsDead && E.Level > 0 && E.IsReady() && m.Item("drawE").GetValue<bool>())
             {
                 Render.Circle.DrawCircle(p.Position, E.Range, System.Drawing.Color.DarkGreen);
+            }
+
+            foreach (
+                      var enemy in
+                         ObjectManager.Get<Obj_AI_Hero>()
+                         .Where(enemy => enemy.GetBuffCount("twitchdeadlyvenom") > 0)
+                             )
+            {
+
+                Drawing.DrawText(enemy.HPBarPosition.X+20, enemy.HPBarPosition.Y+50, System.Drawing.Color.Red, "Stacks: " + enemy.GetBuffCount("twitchdeadlyvenom"));
+               
             }
 
         }
@@ -258,6 +282,7 @@ namespace SNTwitch
                                .Where(enemy => enemy.IsValidTarget(E.Range) && E.IsKillable(enemy))
                        )
             {
+                if(!HasUndyingBuff(enemy))
                 E.Cast();
             }
 
@@ -274,6 +299,48 @@ namespace SNTwitch
             {
                 W.CastIfHitchanceEquals(target, HitChance.High);
             }
+        }
+
+
+        public static bool HasUndyingBuff(Obj_AI_Hero target)
+        {
+            // Tryndamere R
+            if (target.ChampionName == "Tryndamere"
+                && target.Buffs.Any(
+                    b => b.Caster.NetworkId == target.NetworkId && b.IsValidBuff() && b.DisplayName == "Undying Rage"))
+            {
+                return true;
+            }
+
+            // Zilean R
+            if (target.Buffs.Any(b => b.IsValidBuff() && b.DisplayName == "Chrono Shift"))
+            {
+                return true;
+            }
+
+            // Kayle R
+            if (target.Buffs.Any(b => b.IsValidBuff() && b.DisplayName == "JudicatorIntervention"))
+            {
+                return true;
+            }
+
+            // Poppy R
+            if (target.ChampionName == "Poppy")
+            {
+                if (
+                    HeroManager.Allies.Any(
+                        o =>
+                        !o.IsMe
+                        && o.Buffs.Any(
+                            b =>
+                            b.Caster.NetworkId == target.NetworkId && b.IsValidBuff()
+                            && b.DisplayName == "PoppyDITarget")))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
