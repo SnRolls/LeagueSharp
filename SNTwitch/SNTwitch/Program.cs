@@ -167,10 +167,14 @@ namespace SNTwitch
                 if (Atarget.IsValidTarget(800))
                 {
                     Items.UseItem(3142);
-                    if (m.Item("au").IsActive())
-                        R.Cast();
                 }
 
+                if (Atarget.IsValidTarget(700))
+                {
+                    if (m.Item("au").IsActive())
+                        R.Cast();
+
+                }
                 if (Atarget != null && Atarget.Type == p.Type &&
             Atarget.ServerPosition.Distance(p.ServerPosition) < 450)
                 {
