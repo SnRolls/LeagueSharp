@@ -52,17 +52,7 @@ namespace SNMordekaiser
             Game.OnUpdate += OnGameUpdate;
             Drawing.OnDraw += OnGameDraw;
 
-            Drawing.OnDraw += a =>
-            {
-                var offset = 0;
-                foreach (var buff in ObjectManager.Player.Buffs)
-                {
-                    Drawing.DrawText(100, 100 + offset, Color.Tomato,
-                        string.Format("{0} | {1} | {2} | {3} | {4} | {5} | {6}", buff.Name, buff.DisplayName,
-                            buff.Type.ToString(), buff.Count, buff.IsActive, buff.StartTime, buff.EndTime));
-                    offset += 15;
-                }
-            };
+
         }
 
         private static void OnGameUpdate(EventArgs args)
