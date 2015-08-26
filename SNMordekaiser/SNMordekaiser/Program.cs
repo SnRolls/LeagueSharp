@@ -65,6 +65,7 @@ namespace SNMordekaiser
             if (orb.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
                 Combo();
+                
                
             }
 
@@ -98,7 +99,7 @@ namespace SNMordekaiser
             orb = new Orbwalking.Orbwalker(orbMenu);
             m.AddSubMenu(orbMenu);
 
-            var tsMenu = new Menu("TargetSelector", "targetselector");
+            var tsMenu = new Menu("Target Selector", "targetselector");
             TargetSelector.AddToMenu(tsMenu);
             m.AddSubMenu(tsMenu);
 
@@ -171,6 +172,9 @@ namespace SNMordekaiser
             {
                 R.Cast(rGhostArea);
                 SlaveDelay = Environment.TickCount + 1000;
+            }else if(MordekaiserHaveSlave && rGhostArea == null && Environment.TickCount >= SlaveDelay)
+            {
+                R.Cast(Player.Position);
             }
 
         }
@@ -191,7 +195,7 @@ namespace SNMordekaiser
 
         private static void Laneclear()
         {
-            if (!m.Item("lcUseE").IsActive() && E.IsReady())
+            if (m.Item("lcUseE").IsActive() && E.IsReady())
             {
                 var minions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, E.Range);
                 var minionsE = E.GetCircularFarmLocation(minions, E.Range);
@@ -199,7 +203,7 @@ namespace SNMordekaiser
                     return;
                 E.Cast(minionsE.Position);
             }
-            if(!m.Item("lcUseQ").IsActive() && Q.IsReady())
+            if(m.Item("lcUseQ").IsActive() && Q.IsReady())
             {
                 var minionsQ = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, Orbwalking.GetRealAutoAttackRange(Player), MinionTypes.All, MinionTeam.NotAlly);
                
