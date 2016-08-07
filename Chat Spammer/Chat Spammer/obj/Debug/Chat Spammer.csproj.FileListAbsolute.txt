@@ -1,0 +1,17 @@
+C:\Users\L# 3\Desktop\תיקיה חדשה (2)\LeagueSharp\LeagueSharp\LeagueSharp\Chat Spammer\Chat Spammer\bin\Release\Chat Spammer.exe.config
+C:\Users\L# 3\Desktop\תיקיה חדשה (2)\LeagueSharp\LeagueSharp\LeagueSharp\Chat Spammer\Chat Spammer\bin\Release\Chat Spammer.exe
+C:\Users\L# 3\Desktop\תיקיה חדשה (2)\LeagueSharp\LeagueSharp\LeagueSharp\Chat Spammer\Chat Spammer\bin\Release\Chat Spammer.pdb
+C:\Users\L# 3\Desktop\תיקיה חדשה (2)\LeagueSharp\LeagueSharp\LeagueSharp\Chat Spammer\Chat Spammer\bin\Release\LeagueSharp.Common.dll
+C:\Users\L# 3\Desktop\תיקיה חדשה (2)\LeagueSharp\LeagueSharp\LeagueSharp\Chat Spammer\Chat Spammer\bin\Release\LeagueSharp.dll
+C:\Users\L# 3\Desktop\תיקיה חדשה (2)\LeagueSharp\LeagueSharp\LeagueSharp\Chat Spammer\Chat Spammer\bin\Release\SharpDX.dll
+C:\Users\L# 3\Desktop\תיקיה חדשה (2)\LeagueSharp\LeagueSharp\LeagueSharp\Chat Spammer\Chat Spammer\bin\Release\SharpDX.Direct3D9.dll
+C:\Users\L# 3\Desktop\תיקיה חדשה (2)\LeagueSharp\LeagueSharp\LeagueSharp\Chat Spammer\Chat Spammer\bin\Release\LeagueSharp.Data.dll
+C:\Users\L# 3\Desktop\תיקיה חדשה (2)\LeagueSharp\LeagueSharp\LeagueSharp\Chat Spammer\Chat Spammer\bin\Release\clipper_library.dll
+C:\Users\L# 3\Desktop\תיקיה חדשה (2)\LeagueSharp\LeagueSharp\LeagueSharp\Chat Spammer\Chat Spammer\bin\Release\LeagueSharp.Sandbox.dll
+C:\Users\L# 3\Desktop\תיקיה חדשה (2)\LeagueSharp\LeagueSharp\LeagueSharp\Chat Spammer\Chat Spammer\bin\Release\Newtonsoft.Json.dll
+C:\Users\L# 3\Desktop\תיקיה חדשה (2)\LeagueSharp\LeagueSharp\LeagueSharp\Chat Spammer\Chat Spammer\obj\Debug\Chat Spammer.csprojResolveAssemblyReference.cache
+C:\Users\L# 3\Desktop\תיקיה חדשה (2)\LeagueSharp\LeagueSharp\LeagueSharp\Chat Spammer\Chat Spammer\obj\Debug\Chat_Spammer.Form1.resources
+C:\Users\L# 3\Desktop\תיקיה חדשה (2)\LeagueSharp\LeagueSharp\LeagueSharp\Chat Spammer\Chat Spammer\obj\Debug\Chat_Spammer.Properties.Resources.resources
+C:\Users\L# 3\Desktop\תיקיה חדשה (2)\LeagueSharp\LeagueSharp\LeagueSharp\Chat Spammer\Chat Spammer\obj\Debug\Chat Spammer.csproj.GenerateResource.Cache
+C:\Users\L# 3\Desktop\תיקיה חדשה (2)\LeagueSharp\LeagueSharp\LeagueSharp\Chat Spammer\Chat Spammer\obj\Debug\Chat Spammer.exe
+C:\Users\L# 3\Desktop\תיקיה חדשה (2)\LeagueSharp\LeagueSharp\LeagueSharp\Chat Spammer\Chat Spammer\obj\Debug\Chat Spammer.pdb
