@@ -12,3 +12,4 @@ C:\Users\L# 3\Downloads\LeagueSharp\LeagueSharp\LeagueSharp\SNTwitch\SNTwitch\bi
 C:\Users\L# 3\Downloads\LeagueSharp\LeagueSharp\LeagueSharp\SNTwitch\SNTwitch\obj\Debug\SNTwitch.csprojResolveAssemblyReference.cache
 C:\Users\L# 3\Downloads\LeagueSharp\LeagueSharp\LeagueSharp\SNTwitch\SNTwitch\obj\Debug\SNTwitch.exe
 C:\Users\L# 3\Downloads\LeagueSharp\LeagueSharp\LeagueSharp\SNTwitch\SNTwitch\obj\Debug\SNTwitch.pdb
+C:\Users\L# 3\Downloads\LeagueSharp\LeagueSharp\LeagueSharp\SNTwitch\SNTwitch\bin\Release\SebbyLib.dll

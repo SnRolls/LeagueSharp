@@ -8,6 +8,7 @@ using LeagueSharp.Common;
 using SharpDX;
 using System.Drawing;
 using Color = SharpDX.Color;
+using SebbyLib;
 
 namespace SNTwitch
 {
@@ -16,7 +17,8 @@ namespace SNTwitch
     {
         private static Obj_AI_Hero p { get { return ObjectManager.Player; } }
         private static Spell Q, W, E, R, useYumu, Recall;
-        private static Orbwalking.Orbwalker orb;
+        private static LeagueSharp.Common.Orbwalking.Orbwalker orb;
+        private static SebbyLib.Orbwalking.Orbwalker sebbyOrb;
         private static Menu m;
 
         static void Main(string[] args)
@@ -40,7 +42,11 @@ namespace SNTwitch
 
             m = new Menu("SNTwitch by SnRolls", "Twitch", true);
 
-            orb = new Orbwalking.Orbwalker(m.SubMenu("Orbwalker"));
+            if (m.Item("useSebbyOrb").IsActive())
+                sebbyOrb = new SebbyLib.Orbwalking.Orbwalker(m.SubMenu("Orbwalker"));
+            else
+                orb = new LeagueSharp.Common.Orbwalking.Orbwalker(m.SubMenu("Orbwalker"));
+
             TargetSelector.AddToMenu(m.SubMenu("Target Selector"));
 
             m.AddSubMenu(new Menu("Drawings", "drawings", false));
@@ -54,6 +60,7 @@ namespace SNTwitch
             m.AddSubMenu(new Menu("Combo", "combo", false));
             m.SubMenu("combo").AddItem(new MenuItem("cUseQ", "Use Q").SetValue(true));
             m.SubMenu("combo").AddItem(new MenuItem("cUseW", "Use W").SetValue(true));
+            m.SubMenu("combo").AddItem(new MenuItem("cAutoE", "Auto use E on max stacks").SetValue(true));
             m.SubMenu("combo").AddItem(new MenuItem("au", "Auto Ult").SetValue(true));
             m.SubMenu("combo").AddItem(new MenuItem("cActive", "Combo").SetValue(new KeyBind(32, KeyBindType.Press)));
             m.SubMenu("combo").AddItem(new MenuItem("cMode", "Combo Mode").SetValue(new StringList(new [] {"Normal", "Assassination"})));
@@ -69,7 +76,9 @@ namespace SNTwitch
             
             m.SubMenu("misc").AddItem(new MenuItem("eKS", "E Auto-KillSteal").SetValue(true));
             m.SubMenu("misc").AddItem(new MenuItem("resetPassive", "Use W to reset passive on enemy").SetValue(true));
+            m.SubMenu("misc").AddItem(new MenuItem("deathE", "Auto E below health %").SetValue<Slider>(new Slider(5, 1, 100)));
             m.SubMenu("misc").AddItem(new MenuItem("stealthRecall", "Stealth Recall").SetValue(new KeyBind('T', KeyBindType.Press)));
+            m.SubMenu("misc").AddItem(new MenuItem("useSebbyOrb", "Use Sebby Orbwalker(MUST RELOAD L# for it to change)").SetValue(false));
            
             m.AddSubMenu(new Menu("Credits", "credits", false));
             m.SubMenu("credits").AddItem(new MenuItem("c1", "iMeh for KS Epic monsters"));
@@ -93,6 +102,9 @@ namespace SNTwitch
         {
             if (p.IsDead) return;
 
+            if (m.Item("deathE").IsActive() && p.HealthPercent < 5)
+                E.Cast();
+
             if(m.Item("eKS").IsActive())
             CastEKS();
 
@@ -115,113 +127,239 @@ namespace SNTwitch
                 }
             }
 
-            if (orb.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+            if (m.Item("useSebbyOrb").IsActive())
             {
-                switch(m.Item("cMode").GetValue<StringList>().SelectedIndex)
+                if (sebbyOrb.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.Combo)
                 {
-                    case 0:
-                    var Ntarget = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
-                    if (Ntarget.IsValidTarget(W.Range) && m.Item("cUseQ").IsActive())
+                    switch (m.Item("cMode").GetValue<StringList>().SelectedIndex)
                     {
+                        case 0:
+                            var Ntarget = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
+                            if (Ntarget.IsValidTarget(W.Range) && m.Item("cUseQ").IsActive())
+                            {
 
 
-                        Q.Cast();
+                                Q.Cast();
+                            }
+
+                            Items.UseItem(3142);
+                            if (m.Item("au").IsActive())
+                                R.Cast();
+
+                            if (Ntarget != null && Ntarget.Type == p.Type &&
+                        Ntarget.ServerPosition.Distance(p.ServerPosition) < 450)
+                            {
+                                var hasCutGlass = Items.HasItem(3144);
+                                var hasBotrk = Items.HasItem(3153);
+
+                                if (hasBotrk || hasCutGlass)
+                                {
+                                    var itemId = hasCutGlass ? 3144 : 3153;
+                                    var damage = p.GetItemDamage(Ntarget, Damage.DamageItems.Botrk);
+                                    if (hasCutGlass || p.Health + damage < p.MaxHealth)
+                                        Items.UseItem(itemId, Ntarget);
+                                }
+
+
+                            }
+
+                            if (W.IsReady() && m.Item("cUseW").IsActive())
+                            {
+                                if (W.IsInRange(Ntarget))
+                                    CastW();
+                            }
+
+                            if (E.IsReady() && m.Item("cAutoE").IsActive())
+                            {
+                                if (Ntarget.GetBuffCount("twitchdeadlyvenom") == 6 && E.IsInRange(Ntarget))
+                                    E.Cast();
+                            }
+                            break;
+                        case 1:
+                            var Atarget = TargetSelector.GetTarget(2500, TargetSelector.DamageType.Physical);
+                            if (Atarget.IsValidTarget(2500))
+                            {
+                                Q.Cast();
+                            }
+
+                            if (Atarget.IsValidTarget(800))
+                            {
+                                Items.UseItem(3142);
+                            }
+
+                            if (Atarget.IsValidTarget(700))
+                            {
+                                if (m.Item("au").IsActive())
+                                    R.Cast();
+
+                            }
+                            if (Atarget != null && Atarget.Type == p.Type &&
+                        Atarget.ServerPosition.Distance(p.ServerPosition) < 450)
+                            {
+                                var hasCutGlass = Items.HasItem(3144);
+                                var hasBotrk = Items.HasItem(3153);
+
+                                if (hasBotrk || hasCutGlass)
+                                {
+                                    var itemId = hasCutGlass ? 3144 : 3153;
+                                    var damage = p.GetItemDamage(Atarget, Damage.DamageItems.Botrk);
+                                    if (hasCutGlass || p.Health + damage < p.MaxHealth)
+                                        Items.UseItem(itemId, Atarget);
+                                }
+                            }
+
+                            if (W.IsReady())
+                            {
+                                if (W.IsInRange(Atarget))
+                                {
+                                    CastW();
+                                }
+                            }
+                            break;
                     }
 
-                    Items.UseItem(3142);
-                    if (m.Item("au").IsActive())
-                        R.Cast();
-
-                    if (Ntarget != null && Ntarget.Type == p.Type &&
-                Ntarget.ServerPosition.Distance(p.ServerPosition) < 450)
-                    {
-                        var hasCutGlass = Items.HasItem(3144);
-                        var hasBotrk = Items.HasItem(3153);
-
-                        if (hasBotrk || hasCutGlass)
-                        {
-                            var itemId = hasCutGlass ? 3144 : 3153;
-                            var damage = p.GetItemDamage(Ntarget, Damage.DamageItems.Botrk);
-                            if (hasCutGlass || p.Health + damage < p.MaxHealth)
-                                Items.UseItem(itemId, Ntarget);
-                        }
-
-
-                    }
-
-                    if (W.IsReady() && m.Item("cUseW").IsActive())
-                    {
-                        if (W.IsInRange(Ntarget))
-                        {
-                            CastW();
-                        }
-                    }
-                break;
-                    case 1:
-                        var Atarget = TargetSelector.GetTarget(2500, TargetSelector.DamageType.Physical);
-                if(Atarget.IsValidTarget(2500))
-                {
-                    Q.Cast();
                 }
-
-                if (Atarget.IsValidTarget(800))
-                {
-                    Items.UseItem(3142);
-                }
-
-                if (Atarget.IsValidTarget(700))
-                {
-                    if (m.Item("au").IsActive())
-                        R.Cast();
-
-                }
-                if (Atarget != null && Atarget.Type == p.Type &&
-            Atarget.ServerPosition.Distance(p.ServerPosition) < 450)
-                {
-                    var hasCutGlass = Items.HasItem(3144);
-                    var hasBotrk = Items.HasItem(3153);
-
-                    if (hasBotrk || hasCutGlass)
-                    {
-                        var itemId = hasCutGlass ? 3144 : 3153;
-                        var damage = p.GetItemDamage(Atarget, Damage.DamageItems.Botrk);
-                        if (hasCutGlass || p.Health + damage < p.MaxHealth)
-                            Items.UseItem(itemId, Atarget);
-                    }
-                }
-
-                if (W.IsReady())
-                {
-                    if (W.IsInRange(Atarget))
-                    {
-                        CastW();
-                    }
-                }   
-                break;
-                }
-                
-                }
-            
-            if (orb.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+            }else
             {
-
-                if(m.Item("hUseE").GetValue<Slider>().Value > 0)
-               {
-                   foreach (
-                      var enemy in
-                         ObjectManager.Get<Obj_AI_Hero>()
-                         .Where(enemy => enemy.IsValidTarget(E.Range) && enemy.GetBuffCount("twitchdeadlyvenom") == m.Item("hUseE").GetValue<Slider>().Value)
-                             )
-                   
+                if (orb.ActiveMode == LeagueSharp.Common.Orbwalking.OrbwalkingMode.Combo)
+                {
+                    switch (m.Item("cMode").GetValue<StringList>().SelectedIndex)
                     {
-                       if(!HasUndyingBuff(enemy))
-                       E.Cast();
-                       
-                   }
-               }
+                        case 0:
+                            var Ntarget = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
+                            if (Ntarget.IsValidTarget(W.Range) && m.Item("cUseQ").IsActive())
+                            {
+
+
+                                Q.Cast();
+                            }
+
+                            Items.UseItem(3142);
+                            if (m.Item("au").IsActive())
+                                R.Cast();
+
+                            if (Ntarget != null && Ntarget.Type == p.Type &&
+                        Ntarget.ServerPosition.Distance(p.ServerPosition) < 450)
+                            {
+                                var hasCutGlass = Items.HasItem(3144);
+                                var hasBotrk = Items.HasItem(3153);
+
+                                if (hasBotrk || hasCutGlass)
+                                {
+                                    var itemId = hasCutGlass ? 3144 : 3153;
+                                    var damage = p.GetItemDamage(Ntarget, Damage.DamageItems.Botrk);
+                                    if (hasCutGlass || p.Health + damage < p.MaxHealth)
+                                        Items.UseItem(itemId, Ntarget);
+                                }
+
+
+                            }
+
+                            if (W.IsReady() && m.Item("cUseW").IsActive())
+                            {
+                                if (W.IsInRange(Ntarget))
+                                    CastW();
+                            }
+
+                            if (E.IsReady() && m.Item("cAutoE").IsActive())
+                            {
+                                if (Ntarget.GetBuffCount("twitchdeadlyvenom") == 6 && E.IsInRange(Ntarget))
+                                    E.Cast();
+                            }
+                            break;
+                        case 1:
+                            var Atarget = TargetSelector.GetTarget(2500, TargetSelector.DamageType.Physical);
+                            if (Atarget.IsValidTarget(2500))
+                            {
+                                Q.Cast();
+                            }
+
+                            if (Atarget.IsValidTarget(800))
+                            {
+                                Items.UseItem(3142);
+                            }
+
+                            if (Atarget.IsValidTarget(700))
+                            {
+                                if (m.Item("au").IsActive())
+                                    R.Cast();
+
+                            }
+                            if (Atarget != null && Atarget.Type == p.Type &&
+                        Atarget.ServerPosition.Distance(p.ServerPosition) < 450)
+                            {
+                                var hasCutGlass = Items.HasItem(3144);
+                                var hasBotrk = Items.HasItem(3153);
+
+                                if (hasBotrk || hasCutGlass)
+                                {
+                                    var itemId = hasCutGlass ? 3144 : 3153;
+                                    var damage = p.GetItemDamage(Atarget, Damage.DamageItems.Botrk);
+                                    if (hasCutGlass || p.Health + damage < p.MaxHealth)
+                                        Items.UseItem(itemId, Atarget);
+                                }
+                            }
+
+                            if (W.IsReady())
+                            {
+                                if (W.IsInRange(Atarget))
+                                {
+                                    CastW();
+                                }
+                            }
+                            break;
+                    }
+
+                }
+
             }
 
-            if (orb.ActiveMode != Orbwalking.OrbwalkingMode.Combo)
+            if (m.Item("useSebbyOrb").IsActive())
+            {
+                if (sebbyOrb.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.Mixed)
+                {
+                        if (m.Item("hUseE").GetValue<Slider>().Value > 0)
+                        {
+                            foreach (
+                               var enemy in
+                                  ObjectManager.Get<Obj_AI_Hero>()
+                                  .Where(enemy => enemy.IsValidTarget(E.Range) && enemy.GetBuffCount("twitchdeadlyvenom") == m.Item("hUseE").GetValue<Slider>().Value)
+                                      )
+
+                            {
+                                if (!HasUndyingBuff(enemy))
+                                    E.Cast();
+
+                            }
+                        }
+                    }
+               
+            }
+            else
+            {
+                if (orb.ActiveMode == LeagueSharp.Common.Orbwalking.OrbwalkingMode.Mixed)
+                {
+
+                    if (m.Item("hUseE").GetValue<Slider>().Value > 0)
+                    {
+                        foreach (
+                           var enemy in
+                              ObjectManager.Get<Obj_AI_Hero>()
+                              .Where(enemy => enemy.IsValidTarget(E.Range) && enemy.GetBuffCount("twitchdeadlyvenom") == m.Item("hUseE").GetValue<Slider>().Value)
+                                  )
+
+                        {
+                            if (!HasUndyingBuff(enemy))
+                                E.Cast();
+
+                        }
+                    }
+                }
+            }
+
+            if (m.Item("useSebbyOrb").IsActive())
+            {
+                if (sebbyOrb.ActiveMode != SebbyLib.Orbwalking.OrbwalkingMode.Combo)
                 {
                     var minions = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.NotAlly);
                     foreach (var mi in minions)
@@ -241,6 +379,30 @@ namespace SNTwitch
                         }
                     }
                 }
+
+            }else
+            {
+                if (orb.ActiveMode != LeagueSharp.Common.Orbwalking.OrbwalkingMode.Combo)
+                {
+                    var minions = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.NotAlly);
+                    foreach (var mi in minions)
+                    {
+                        switch (m.Item("Emobs").GetValue<StringList>().SelectedIndex)
+                        {
+                            case 0:
+                                if ((mi.BaseSkinName.Contains("Dragon") || mi.BaseSkinName.Contains("Baron")) && E.IsKillable(mi))
+                                {
+                                    E.Cast();
+                                }
+                                break;
+
+                            case 1:
+                                return;
+                                break;
+                        }
+                    }
+                }
+            }
             
             
 
